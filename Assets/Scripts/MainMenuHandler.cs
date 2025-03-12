@@ -1,24 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenuHandler : MonoBehaviour
 {
     public void OnPlayButtonClick()
-        => LoadScene("LevelSelectScene");
+        => SceneHandler.LoadScene("LevelSelectMenu");
 
     public void OnOptionsButtonClick()
-        => LoadScene("OptionsScene");
+        => SceneHandler.LoadScene("OptionsMenu");
 
     public void OnQuitButtonClick()
         => Application.Quit();
-
-    private void LoadScene(string sceneName)
-    {
-        if (Application.CanStreamedLevelBeLoaded(sceneName))
-        {
-            SceneManager.LoadScene(sceneName);
-            return;
-        }
-        Debug.LogError("Scene doesn't exist!");
-    }
 }
