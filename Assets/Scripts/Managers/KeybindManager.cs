@@ -51,10 +51,12 @@ public class KeybindManager : MonoBehaviour
             {
                 //Use enum.Parse to convert the string representation of the key code in PlayerPrefs to an actual enum.
                 keybinds[action] = (KeyCode)Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString(action));
-                return;
             }
-            //If no PlayerPref found, return None keybind.
-            keybinds[action] = KeyCode.None;
+            else
+            {
+                //If no PlayerPref found, return None keybind.
+                keybinds[action] = KeyCode.None;
+            }
         }
     }
 }
