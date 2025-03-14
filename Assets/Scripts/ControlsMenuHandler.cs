@@ -15,6 +15,11 @@ public class ControlsMenuHandler : MonoBehaviour
 
     private string waitingForKey = null;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) { SceneHandler.LoadScene("OptionsMenu"); }
+    }
+
     private void Start()
     {
         UpdateButtonLabels();
@@ -34,11 +39,15 @@ public class ControlsMenuHandler : MonoBehaviour
     private IEnumerator WaitForKeyPress(string action)
     {
         waitingForKey = action;
+        //Use a dedicated function to get the button associated with an action.
         TextMeshProUGUI buttonText = GetButtonForAction(action);
+        //Indicate to the user which control they're changing.
         buttonText.text = "Press any key...";
 
+        //When no input is detected, return nothing.
         while (!Input.anyKeyDown) { yield return null; }
 
+        //Only get the valid range of keycodes.
         foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
         {
             if (Input.GetKeyDown(key))
@@ -52,6 +61,7 @@ public class ControlsMenuHandler : MonoBehaviour
 
     private TextMeshProUGUI GetButtonForAction(string action)
     {
+        //A simplified switch statement which can be returned all at once.
         return action switch
         {
             "Thrust" => thrustBindingButton,

@@ -24,6 +24,7 @@ public class KeybindManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             //Initialise dictionary with values stored in PlayerPrefs.
+            SetDefaultKeybinds();
             LoadKeybinds();
             return;
         }
@@ -32,14 +33,17 @@ public class KeybindManager : MonoBehaviour
 
     public void SetKeybind(string action, KeyCode key)
     {
+        //Set the dictionary storing the current keybinds.
         keybinds[action] = key;
-
+        
         PlayerPrefs.SetString(action, key.ToString());
         PlayerPrefs.Save();
 
+        //Call the event.
         OnKeybindsUpdated?.Invoke();
     }
 
+    //Validation to check if the keybind exists, if not return an empty key.
     public KeyCode GetKeybind(string action) => keybinds.ContainsKey(action) ? keybinds[action] : KeyCode.None;
 
     private void LoadKeybinds()
@@ -58,5 +62,36 @@ public class KeybindManager : MonoBehaviour
                 keybinds[action] = KeyCode.None;
             }
         }
+    }
+
+    private void SetDefaultKeybinds()
+    {
+        bool defaultsSet = false;
+
+        foreach (string action in actions)
+        {
+            if (!PlayerPrefs.HasKey(action))
+            {
+                keybinds[action] = GetDefaultKeybind(action);
+                PlayerPrefs.SetString(action, keybinds[action].ToString());
+                defaultsSet = true;  //Flag that defaults were set.
+            }
+        }
+
+        if (defaultsSet)
+        {
+            PlayerPrefs.Save();  //Only save once if we set defaults.
+        }
+    }
+
+    private KeyCode GetDefaultKeybind(string action)
+    {
+        return action switch
+        {
+            "Thrust" => KeyCode.Space,
+            "RotateLeft" => KeyCode.A,
+            "RotateRight" => KeyCode.D,
+            _ => KeyCode.None
+        };
     }
 }
