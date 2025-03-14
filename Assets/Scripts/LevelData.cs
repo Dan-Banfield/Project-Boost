@@ -8,7 +8,11 @@ public class LevelData
     [Key(0)] public List<LevelInfo> Levels { get; set; } = new List<LevelInfo>();
 
     //LINQ expression to match the pattern of a level being unlocked.
-    public bool IsLevelUnlocked(int level) => Levels.Exists(l => l.LevelNumber == level && l.IsUnlocked);
+    public bool IsLevelUnlocked(int level)
+    {
+        LevelInfo levelInfo = Levels.Find(l => l.LevelNumber == level);
+        return levelInfo != null && levelInfo.IsUnlocked;
+    }
 
     public void UnlockLevel(int level)
     {
@@ -16,7 +20,10 @@ public class LevelData
         if (levelInfo != null) levelInfo.IsUnlocked = true;
     }
 
-    public LevelInfo GetLevelInfo(int level) => Levels.Find(l => l.LevelNumber == level);
+    public LevelInfo GetLevelInfo(string sceneName)
+    {
+        return Levels.Find(level => level.SceneName == sceneName);
+    }
 }
 
 [MessagePackObject]
@@ -39,5 +46,14 @@ public class LevelInfo
         SilverTime = silver;
         GoldTime = gold;
         IsUnlocked = unlocked;
+    }
+
+    public string GetMedal(float playerTime)
+    {
+        if (playerTime <= GoldTime) return "Gold";
+        if (playerTime <= SilverTime) return "Silver";
+        if (playerTime < BronzeTime) return "Bronze";
+
+        return "None";
     }
 }
