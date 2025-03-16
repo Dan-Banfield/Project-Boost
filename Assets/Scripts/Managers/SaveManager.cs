@@ -46,14 +46,14 @@ public static class SaveManager
             {
                 new LevelInfo(1, "Level1Scene", 30f, 20f, 10f, true),
                 new LevelInfo(2, "Level2Scene", 30f, 20f, 10f),
-                new LevelInfo(3, "Level3Scene", 60f, 45f, 30f),
-                new LevelInfo(4, "Level4Scene", 60f, 45f, 30f),
-                new LevelInfo(5, "Level5Scene", 60f, 45f, 30f),
-                new LevelInfo(6, "Level6Scene", 60f, 45f, 30f),
-                new LevelInfo(7, "Level7Scene", 60f, 45f, 30f),
-                new LevelInfo(8, "Level8Scene", 60f, 45f, 30f),
-                new LevelInfo(9, "Level9Scene", 60f, 45f, 30f),
-                new LevelInfo(10, "Level10Scene", 60f, 45f, 30f)
+                new LevelInfo(3, "Level3Scene", 30f, 20f, 10f),
+                new LevelInfo(4, "Level4Scene", 30f, 20f, 10f),
+                new LevelInfo(5, "Level5Scene", 30f, 20f, 10f),
+                new LevelInfo(6, "Level6Scene", 30f, 20f, 10f),
+                new LevelInfo(7, "Level7Scene", 30f, 20f, 10f),
+                new LevelInfo(8, "Level8Scene", 30f, 20f, 10f),
+                new LevelInfo(9, "Level9Scene", 30f, 20f, 10f),
+                new LevelInfo(10, "Level10Scene", 30f, 20f, 10f)
             }
         };
 
