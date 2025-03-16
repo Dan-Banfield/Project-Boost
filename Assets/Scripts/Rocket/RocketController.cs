@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class RocketController : MonoBehaviour
@@ -6,6 +7,10 @@ public class RocketController : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rocketRigidbody2d;
     [SerializeField] private Transform rocketTransform;
+
+    [SerializeField] private ParticleSystem jetParticleSystem;
+    [SerializeField] private ParticleSystem successParticleSystem;
+    [SerializeField] private ParticleSystem explosionParticleSystem;
 
     #endregion
 
@@ -44,10 +49,12 @@ public class RocketController : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             case "Obstacle":
-                gameManager.LoseLevel();
+                StartCoroutine(LoseLevel());
+                jetParticleSystem.Stop();
                 break;
             case "Finish":
-                gameManager.FinishLevel(TimerManager.Instance.GetElapsedTime());
+                StartCoroutine(FinishLevel(TimerManager.Instance.GetElapsedTime()));
+                jetParticleSystem.Stop();
                 break;
             default: break;
         }
@@ -67,15 +74,15 @@ public class RocketController : MonoBehaviour
         rocketRigidbody2d.freezeRotation = true;
 
         if (Input.anyKeyDown)
-        {
-            if (!TimerManager.Instance.Running())
-                TimerManager.Instance.StartTimer();
-        }
+            if (!TimerManager.Instance.Running()) { TimerManager.Instance.StartTimer(); }
 
         if (Input.GetKey(thrustKey)) { Thrust(); }
+        else { StopThrusting(); }
+
         if (Input.GetKey(rotateLeftKey)) { RotateLeft(); }
         if (Input.GetKey(rotateRightKey)) { RotateRight(); }
 
+        //Allow rotation again after user has stopped inputting.
         rocketRigidbody2d.freezeRotation = false;
     }
 
@@ -83,6 +90,13 @@ public class RocketController : MonoBehaviour
     {
         //Achieve physics-based movement by adding force to the Y axis' facing direction.
         rocketRigidbody2d.AddRelativeForce(new Vector3(0, (thrustSpeed * Time.deltaTime), 0));
+
+        PlayParticle("Thrust");
+    }
+
+    private void StopThrusting()
+    {
+        if (jetParticleSystem.isPlaying) { jetParticleSystem.Stop(); }
     }
 
     private void RotateLeft()
@@ -93,5 +107,41 @@ public class RocketController : MonoBehaviour
     private void RotateRight()
     {
         rocketTransform.Rotate(new Vector3(0, 0, -(rotationSpeed * Time.deltaTime)));
+    }
+
+    private void PlayParticle(string particleName)
+    {
+        if (rocketState != State.Alive) return;
+
+        switch (particleName)
+        {
+            case "Explosion":
+                if (!explosionParticleSystem.isPlaying) explosionParticleSystem.Play();
+                break;
+            case "Success":
+                if (!successParticleSystem.isPlaying) successParticleSystem.Play();
+                break;
+            case "Thrust":
+                if (!jetParticleSystem.isPlaying) jetParticleSystem.Play();
+                break;
+        }
+    }
+
+    private IEnumerator FinishLevel(float elapsedTime)
+    {
+        PlayParticle("Success");
+        rocketState = State.Dead;
+
+        yield return new WaitForSeconds(2);
+        gameManager.FinishLevel(elapsedTime);
+    }
+
+    private IEnumerator LoseLevel()
+    {
+        PlayParticle("Explosion");
+        rocketState = State.Dead;
+
+        yield return new WaitForSeconds(2);
+        gameManager.LoseLevel();
     }
 }

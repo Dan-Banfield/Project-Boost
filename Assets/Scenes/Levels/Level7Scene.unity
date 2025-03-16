@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 1, z: 0}
-  speed: 1
+  speed: 2
   distance: 2
   startDelay: 2
 --- !u!1001 &399256194
@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 1, z: 0}
-  speed: 1
+  speed: 2
   distance: 2
   startDelay: 1
 --- !u!1001 &518157349
@@ -574,7 +574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 1, z: 0}
-  speed: 1
+  speed: 2
   distance: 2
   startDelay: 3
 --- !u!1 &673022430
@@ -1181,7 +1181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementDirection: {x: 0, y: 1, z: 0}
-  speed: 1
+  speed: 2
   distance: 2
   startDelay: 0
 --- !u!1001 &1170642258541634948

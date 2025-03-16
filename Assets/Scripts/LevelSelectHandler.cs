@@ -14,6 +14,11 @@ public class LevelSelectUI : MonoBehaviour
         GenerateLevelButtons();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) { SceneHandler.LoadScene("MainMenu"); }
+    }
+
     private void GenerateLevelButtons()
     {
         //Clear existing buttons to prevent duplicates.
