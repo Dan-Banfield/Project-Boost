@@ -11,6 +11,7 @@ public static class SaveManager
     {
         try
         {
+            //Serialize level data using message pack and store it in a file.
             byte[] data = MessagePackSerializer.Serialize(levelData);
             File.WriteAllBytes(saveFilePath, data);
             Debug.Log("Game saved.");
@@ -23,10 +24,12 @@ public static class SaveManager
 
     public static LevelData LoadGame()
     {
+        //Validation if save file exists.
         if (File.Exists(saveFilePath))
         {
             try
             {
+                //Read bytes and use message pack to desrialize to level data.
                 byte[] data = File.ReadAllBytes(saveFilePath);
                 return MessagePackSerializer.Deserialize<LevelData>(data);
             }
@@ -38,10 +41,11 @@ public static class SaveManager
 
         LevelData newGame = new LevelData
         {
+            //Create default levels if no save file exists.
             Levels = new List<LevelInfo>
             {
-                new LevelInfo(1, "Level1Scene", 60f, 45f, 30f, true),
-                new LevelInfo(2, "Level2Scene", 60f, 45f, 30f),
+                new LevelInfo(1, "Level1Scene", 30f, 20f, 10f, true),
+                new LevelInfo(2, "Level2Scene", 30f, 20f, 10f),
                 new LevelInfo(3, "Level3Scene", 60f, 45f, 30f),
                 new LevelInfo(4, "Level4Scene", 60f, 45f, 30f),
                 new LevelInfo(5, "Level5Scene", 60f, 45f, 30f),
@@ -57,6 +61,7 @@ public static class SaveManager
         return newGame;
     }
 
+    //Return details for a level by searching the list based on scene name.
     public static LevelInfo GetLevelInfo(string sceneName)
     {
         LevelData data = LoadGame();

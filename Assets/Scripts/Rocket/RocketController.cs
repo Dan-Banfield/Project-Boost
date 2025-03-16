@@ -21,12 +21,14 @@ public class RocketController : MonoBehaviour
     private enum State { Alive, Dead, Paused };
     private State rocketState = State.Alive;
 
+    //Cache user-keybinds so they don't repeatadly have to be fetched.
     private KeyCode thrustKey;
     private KeyCode rotateLeftKey;
     private KeyCode rotateRightKey;
 
     private void Awake()
     {
+        //Get custom user keybinds when script initialised.
         GetKeybinds();
     }
 
@@ -37,6 +39,8 @@ public class RocketController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //When rocket collides, check collision object's tag.
+        //Act accordingly.
         switch (collision.gameObject.tag)
         {
             case "Obstacle":
@@ -59,6 +63,7 @@ public class RocketController : MonoBehaviour
 
     private void HandleInput()
     {
+        //Prevent unnecesarry rotation.
         rocketRigidbody2d.freezeRotation = true;
 
         if (Input.anyKeyDown)

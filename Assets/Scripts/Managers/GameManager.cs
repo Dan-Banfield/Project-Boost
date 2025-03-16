@@ -26,11 +26,13 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        //Assign the timer text element to the variable in TimerManager.
         TimerManager.Instance.SetTimerTextComponent(timerText);
     }
 
     private void Update()
     {
+        //Check for the escape key to open pause menu.
         if (Input.GetKeyDown(KeyCode.Escape)) { TogglePauseMenu(); }
     }
 
@@ -41,6 +43,7 @@ public class GameManager : MonoBehaviour
         switch (paused)
         {
             case true:
+                //Freeze in-game time when pause menu active.
                 Time.timeScale = 0f;
                 pauseMenu.SetActive(true);
                 break;
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
 
     public void ReturnToMenu()
     {
+        //Re-enable time and reset timer for next levels.
         Time.timeScale = 1f;
 
         TimerManager.Instance.ResetTimer();
@@ -77,22 +81,22 @@ public class GameManager : MonoBehaviour
 
         if (currentLevelInfo != null)
         {
-            // Get the next level's number
+            //Get the next level's number.
             int nextLevelNumber = currentLevelInfo.LevelNumber + 1;
-
-            // Fetch the level data
+            //Fetch the level data.
             LevelData data = SaveManager.LoadGame();
-
-            // Find the next level in the list
+            //Find the next level in the list.
             LevelInfo nextLevelInfo = data.Levels.Find(l => l.LevelNumber == nextLevelNumber);
 
             if (nextLevelInfo != null && nextLevelInfo.IsUnlocked)
             {
                 // Load the next scene based on the level's scene name
                 SceneHandler.LoadScene(nextLevelInfo.SceneName);
+                TimerManager.Instance.ResetTimer();
             }
             else
             {
+                //Validation.
                 Debug.LogWarning("Next level is locked or does not exist.");
             }
         }
@@ -127,6 +131,9 @@ public class GameManager : MonoBehaviour
             if (medal == "Gold" || medal == "Silver" || medal == "Bronze")
                 UnlockNextLevel(levelInfo.LevelNumber);
 
+            //Re-enable in case disable by previous level.
+            medalImage.enabled = true;
+
             switch (medal)
             {
                 case "Gold":
@@ -139,19 +146,23 @@ public class GameManager : MonoBehaviour
                     medalImage.sprite = bronzeMedal;
                     break;
                 default:
-                    medalImage.sprite = null;
+                    medalImage.enabled = false;
                     break;
             }
         }
 
-        // Check if next level is unlocked and enable/disable the button accordingly
+        //Check if next level is unlocked and enable/disable the button accordingly.
         int nextLevelNumber = levelInfo.LevelNumber + 1;
         LevelData data = SaveManager.LoadGame();
 
-        if (data.IsLevelUnlocked(nextLevelNumber) && Application.CanStreamedLevelBeLoaded(data.Levels[nextLevelNumber].SceneName))
+        if (data.IsLevelUnlocked(nextLevelNumber))
+        {
             nextLevelButton.interactable = true;
+        }
         else
+        {
             nextLevelButton.interactable = false;
+        }
     }
 
     private void UnlockNextLevel(int currentLevelNumber)

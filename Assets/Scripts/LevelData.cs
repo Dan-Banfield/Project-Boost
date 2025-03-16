@@ -14,18 +14,21 @@ public class LevelData
         return levelInfo != null && levelInfo.IsUnlocked;
     }
 
+    //Change level state to unlocked.
     public void UnlockLevel(int level)
     {
         LevelInfo levelInfo = Levels.Find(l => l.LevelNumber == level);
         if (levelInfo != null) levelInfo.IsUnlocked = true;
     }
 
+    //Get info for a level based on its scene name.
     public LevelInfo GetLevelInfo(string sceneName)
     {
         return Levels.Find(level => level.SceneName == sceneName);
     }
 }
 
+//Serializeable attribute for MessagePack.
 [MessagePackObject]
 public class LevelInfo
 {
@@ -48,6 +51,7 @@ public class LevelInfo
         IsUnlocked = unlocked;
     }
 
+    //Get the medal the player won from data.
     public string GetMedal(float playerTime)
     {
         if (playerTime <= GoldTime) return "Gold";
